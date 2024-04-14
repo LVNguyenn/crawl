@@ -1,6 +1,5 @@
 const startBrowser = require("./browser");
 const scrapeController = require("./scrapeController");
-//const cron = require("node-cron");
 const path = require("path");
 const express = require("express");
 const fs = require("fs");
@@ -10,98 +9,6 @@ const connectDB = require("./db/connect");
 const Article = require("./models/articleModel");
 const scraper = require("./scraper");
 require("dotenv").config();
-
-// cron.schedule(
-//   "*/60 * * * * *",
-//   async () => {
-//     console.log("Running crawler...");
-
-//     let browser = startBrowser();
-//     await scrapeController(browser);
-//   },
-//   {
-//     timezone: "Asia/Ho_Chi_Minh",
-//   }
-// );
-
-// async function runCrawler() {
-//   let browser = startBrowser();
-//   await scrapeController(browser);
-
-//   setTimeout(runCrawler, 60000);
-// }
-
-// runCrawler();
-
-// app.get("/api/articles/:id", (req, res) => {
-//   const articleId = req.params.id;
-
-//   fs.readFile(filePath, "utf8", (err, data) => {
-//     if (err) {
-//       console.error("Error reading file:", err);
-//       res.status(500).json({ status: "failed", msg: "Internal server error" });
-//       return;
-//     }
-
-//     try {
-//       const jsonData = JSON.parse(data);
-
-//       const article = jsonData.find((article) => article.id === articleId);
-
-//       if (!article) {
-//         res.status(404).json({ status: "failed", msg: "Article not found" });
-//       } else {
-//         res.json(article);
-//       }
-//     } catch (parseError) {
-//       console.error("Error parsing JSON:", parseError);
-//       res.status(500).json({ status: "failed", msg: "Internal server error" });
-//     }
-//   });
-// });
-
-// app.get("/api/articles", (req, res) => {
-//   fs.readFile(filePath, "utf8", (err, data) => {
-//     if (err) {
-//       console.error("Error reading file:", err);
-//       res.status(500).json({ status: "failed", msg: "Internal server error" });
-//       return;
-//     }
-
-//     try {
-//       const articlesData = JSON.parse(data);
-
-//       const page = Math.abs(parseInt(req.query.page)) || 1;
-//       const perPage = Math.abs(parseInt(req.query.perPage)) || 5;
-
-//       const startIndex = (page - 1) * perPage;
-//       const endIndex = startIndex + perPage;
-
-//       const articlesOnPage = articlesData.slice(startIndex, endIndex);
-
-//       const transformedArticles = articlesOnPage.map((article) => ({
-//         id: article.id,
-//         thumbnail: article.thumbnail,
-//         title: article.title,
-//         publish: article.meta.publish,
-//         summary: article.summary,
-//       }));
-
-//       const hasNextPage = endIndex < articlesData.length;
-
-//       res.json({
-//         article: transformedArticles,
-//         page: page,
-//         perPage: perPage,
-//         total: articlesData.length,
-//         hasNextPage: hasNextPage,
-//       });
-//     } catch (parseError) {
-//       console.error("Error parsing JSON:", parseError);
-//       res.status(500).json({ status: "failed", msg: "Internal server error" });
-//     }
-//   });
-// });
 
 app.get("/scrape", async (req, res) => {
   const url = "https://lifestyle.znews.vn/oto-xe-may.html";

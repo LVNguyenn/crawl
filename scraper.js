@@ -1,5 +1,3 @@
-//import { scrollPageToBottom } from "puppeteer-autoscroll-down";
-//const getLastDayCrawl = require("./utils");
 const path = require("path");
 const Article = require("./models/articleModel");
 const moment = require("moment");
@@ -75,8 +73,6 @@ const scraper = async (browser, url) => {
 
     const scrapeData = [];
 
-    const filePath = path.join(__dirname, "./article.json");
-    // const lastDay = await getLastDayCrawl(filePath);
     const lastDay = await Article.findOne()
       .sort({ "meta.publish": -1 })
       .limit(1)
@@ -94,9 +90,9 @@ const scraper = async (browser, url) => {
         }
         const formatDate = (dateString) => {
           const date = new Date(dateString);
-          const day = (date.getMonth() + 1).toString().padStart(2, "0"); // Lấy tháng và thêm số 0 phía trước nếu cần
-          const month = date.getDate().toString().padStart(2, "0"); // Lấy ngày và thêm số 0 phía trước nếu cần
-          const year = date.getFullYear().toString(); // Lấy năm
+          const day = (date.getMonth() + 1).toString().padStart(2, "0");
+          const month = date.getDate().toString().padStart(2, "0");
+          const year = date.getFullYear().toString();
 
           const hour = date.getHours();
           const minute = date.getMinutes();
@@ -108,8 +104,6 @@ const scraper = async (browser, url) => {
             "header p.article-meta > span > span"
           ).innerText;
           day = formatDate(day);
-          //day = moment(day, "HH:mm DD/MM/YYYY");
-          //const abc = lastDay.meta.publish;
           if (!compareDateTime(day, lastDay.meta.publish)) break;
           const thumbnail = el.querySelector("p > a > img")?.src;
           if (
@@ -228,23 +222,13 @@ const scraper = async (browser, url) => {
       }
     };
 
-    //const details = [];
     console.log(detailLinks.length);
     for (let link of detailLinks) {
       console.log("Day", link.day);
-      // console.log("Last Day", link.abc);
       const detail = await scraperDetail(link.link);
       detail.thumbnail = link.thumbnail;
-      //details.push(detail);
       scrapeData.push(detail);
     }
-    //scrapeData.body = details;
-
-    // const link =
-    //   "https://lifestyle.znews.vn/porsche-macan-thuan-dien-lo-gia-ban-tai-viet-nam-post1469105.html";
-    // const detail = await scraperDetail(link);
-    // console.log(detail);
-    // scrapeData.body = detail;
 
     return scrapeData;
   } catch (error) {

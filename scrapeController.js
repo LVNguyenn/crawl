@@ -1,6 +1,4 @@
 const scraper = require("./scraper");
-//const fs = require("fs");
-const path = require("path");
 const Article = require("./models/articleModel");
 
 const scrapeController = async (browserInstance) => {
@@ -10,36 +8,6 @@ const scrapeController = async (browserInstance) => {
     // Gọi hàm cào dữ liệu ở scraper.js
 
     const result = await scraper(browser, url);
-    //const filePath = path.join(__dirname, "./article.json");
-
-    // if (result.length !== 0) {
-    //   fs.readFile(filePath, (err, data) => {
-    //     if (err) {
-    //       console.log("Error reading file:", err);
-    //       return;
-    //     }
-
-    //     let jsonData = [];
-    //     try {
-    //       jsonData = JSON.parse(data);
-    //     } catch (error) {
-    //       console.log("Error parsing JSON data:", error);
-    //       return;
-    //     }
-
-    //     result.reverse().forEach((item) => {
-    //       jsonData.unshift(item);
-    //     });
-
-    //     fs.writeFile(filePath, JSON.stringify(jsonData), (err) => {
-    //       if (err) {
-    //         console.log("Error writing file:", err);
-    //       } else {
-    //         console.log("Added new data successfully.");
-    //       }
-    //     });
-    //   });
-    // }
 
     if (result.length !== 0) {
       try {
