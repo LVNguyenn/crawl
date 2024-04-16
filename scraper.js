@@ -89,15 +89,55 @@ const scraper = async (browser, url) => {
           return new Date(date1) > new Date(date2);
         }
         const formatDate = (dateString) => {
-          const date = new Date(dateString);
-          const day = (date.getMonth() + 1).toString().padStart(2, "0");
-          const month = date.getDate().toString().padStart(2, "0");
-          const year = date.getFullYear().toString();
+          // Tách phần ngày và thời gian từ chuỗi đầu vào
+          const parts = dateString.split(" ");
+          const datePart = parts[1]; // Phần ngày là phần thứ 2
+          const timePart = parts[0]; // Phần thời gian là phần đầu tiên
 
-          const hour = date.getHours();
-          const minute = date.getMinutes();
+          // Phân tích phần ngày
+          const [day, month, year] = datePart
+            .split("/")
+            .map((part) => parseInt(part));
 
-          return `${month}/${day}/${year} ${hour}:${minute}`;
+          // Phân tích phần thời gian
+          const [hour, minute] = timePart
+            .split(":")
+            .map((part) => parseInt(part));
+
+          // Kiểm tra tính hợp lệ của ngày và thời gian
+          if (
+            isNaN(day) ||
+            isNaN(month) ||
+            isNaN(year) ||
+            isNaN(hour) ||
+            isNaN(minute)
+          ) {
+            return "Invalid Date";
+          }
+
+          // Tạo đối tượng Date từ các phần đã tách, sử dụng múi giờ UTC
+          const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
+
+          // Kiểm tra nếu ngày không hợp lệ (ví dụ: ngày 31/4 không tồn tại)
+          if (
+            date.getUTCDate() !== day ||
+            date.getUTCMonth() !== month - 1 ||
+            date.getUTCFullYear() !== year
+          ) {
+            return "Invalid Date";
+          }
+
+          // Định dạng ngày và thời gian theo định dạng yêu cầu
+          const formattedMonth = month.toString().padStart(2, "0"); // Không cần trừ 1 ở đây vì month là 4 (truyền vào là 14/4/2024)
+          const formattedDay = day.toString().padStart(2, "0");
+          const formattedYear = year.toString();
+          const formattedHour = date.getUTCHours().toString().padStart(2, "0");
+          const formattedMinute = date
+            .getUTCMinutes()
+            .toString()
+            .padStart(2, "0");
+
+          return `${formattedYear}-${formattedMonth}-${formattedDay}T${formattedHour}:${formattedMinute}:00.000Z`;
         };
         for (const el of els) {
           let day = el.querySelector(
