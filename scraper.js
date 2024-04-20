@@ -193,8 +193,8 @@ const scraper = async (browser, url) => {
         const meta = await pageDetail.$eval(
           "#page-article article > header ul.the-article-meta",
           (el) => ({
-            author: el.querySelector("li:first-child > a").innerText,
-            publish: el.querySelector("li:nth-child(2)").innerText,
+            author: el.querySelector("li.the-article-author > a")?.innerText,
+            publish: el.querySelector("li.the-article-publish").innerText,
           })
         );
         meta.publish = moment(meta.publish, "dddd, DD/MM/YYYY HH:mm", "vi");
