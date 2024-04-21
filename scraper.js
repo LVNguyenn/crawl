@@ -83,7 +83,7 @@ const scraper = async (browser, url) => {
     let offsetHours = +7;
     lastDayTemp.setHours(lastDayTemp.getHours() + offsetHours);
     lastDay = lastDayTemp.toISOString();
-    console.log("LastDay: ", lastDay);
+    console.log("Lastday: ", lastDay);
 
     // lấy link và thumbnail
     const detailLinks = await newPage.$$eval(
