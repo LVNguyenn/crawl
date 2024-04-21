@@ -73,12 +73,17 @@ const scraper = async (browser, url) => {
 
     const scrapeData = [];
 
-    const lastDay = await Article.findOne()
+    const article = await Article.findOne()
       .sort({ "meta.publish": -1 })
       .limit(1)
       .select("meta.publish")
       .lean();
-    console.log("LastDay: ", lastDay.meta.publish);
+    let lastDay = article.meta.publish;
+    let lastDayTemp = new Date(lastDay);
+    let offsetHours = +7;
+    lastDayTemp.setHours(lastDayTemp.getHours() + offsetHours);
+    lastDay = lastDayTemp.toISOString();
+    console.log("LastDay: ", lastDay);
 
     // lấy link và thumbnail
     const detailLinks = await newPage.$$eval(
@@ -144,7 +149,7 @@ const scraper = async (browser, url) => {
             "header p.article-meta > span > span"
           ).innerText;
           day = formatDate(day);
-          if (!compareDateTime(day, lastDay.meta.publish)) break;
+          if (!compareDateTime(day, lastDay)) break;
           const thumbnail = el.querySelector("p > a > img")?.src;
           if (
             thumbnail ===
