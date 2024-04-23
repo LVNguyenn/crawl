@@ -79,10 +79,10 @@ const scraper = async (browser, url) => {
       .select("meta.publish")
       .lean();
     let lastDay = article.meta.publish;
-    let lastDayTemp = new Date(lastDay);
-    let offsetHours = +7;
-    lastDayTemp.setHours(lastDayTemp.getHours() + offsetHours);
-    lastDay = lastDayTemp.toISOString();
+    //let lastDayTemp = new Date(lastDay);
+    //let offsetHours = +7;
+    //lastDayTemp.setHours(lastDayTemp.getHours() + offsetHours);
+    //lastDay = lastDayTemp.toISOString();
     console.log("Lastday: ", lastDay);
 
     // lấy link và thumbnail
@@ -164,6 +164,18 @@ const scraper = async (browser, url) => {
       lastDay
     );
 
+    function parseDateTime(dateTimeString) {
+      const dateParts = dateTimeString.split(" ");
+      const dateString = dateParts[2];
+      const timeString = dateParts[3];
+
+      const [day, month, year] = dateString.split("/");
+      const [hour, minute] = timeString.split(":");
+
+      const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
+      return date;
+    }
+
     const scraperDetail = async (link) => {
       try {
         let pageDetail = await browser.newPage();
@@ -202,7 +214,8 @@ const scraper = async (browser, url) => {
             publish: el.querySelector("li.the-article-publish").innerText,
           })
         );
-        meta.publish = moment(meta.publish, "dddd, DD/MM/YYYY HH:mm", "vi");
+        //meta.publish = moment(meta.publish, "dddd, DD/MM/YYYY HH:mm", "vi");
+        meta.publish = parseDateTime(meta.publish);
         detailData.meta = meta;
 
         // cào nội dung chính
