@@ -145,9 +145,13 @@ const scraper = async (browser, url) => {
           return `${formattedYear}-${formattedMonth}-${formattedDay}T${formattedHour}:${formattedMinute}:00.000Z`;
         };
         for (const el of els) {
-          let day = el.querySelector(
-            "header p.article-meta > span > span"
+          let dayTime = el.querySelector(
+            "header p.article-meta > span > span.time"
           ).innerText;
+          let dayDate = el.querySelector(
+            "header p.article-meta > span > span.date"
+          ).innerText;
+          let day = dayTime + " " + dayDate;
           day = formatDate(day);
           if (!compareDateTime(day, lastDay)) break;
           const thumbnail = el.querySelector("p > a > img")?.src;
