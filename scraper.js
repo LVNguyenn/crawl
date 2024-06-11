@@ -60,7 +60,7 @@ const scraper = async (browser, url) => {
   try {
     const newPage = await browser.newPage();
     console.log("New tab opened ...");
-    await newPage.goto(url);
+    await newPage.goto(url, { timeout: 60000 });
     console.log("Access the page: " + url);
 
     await newPage.waitForSelector("div.page-wrapper");
@@ -183,7 +183,7 @@ const scraper = async (browser, url) => {
     const scraperDetail = async (link) => {
       try {
         let pageDetail = await browser.newPage();
-        await pageDetail.goto(link);
+        await pageDetail.goto(link, { timeout: 60000 });
         console.log("Access: " + link);
         await pageDetail.waitForSelector("#page-article");
 
