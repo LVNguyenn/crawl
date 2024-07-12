@@ -212,7 +212,7 @@ const scraper = async (browser, url) => {
 
         // cào tác giả và ngày đăng
         const meta = await pageDetail.$eval(
-          "#page-article article > header ul.the-article-meta",
+          "#page-article article ul.the-article-meta",
           (el) => ({
             author: el.querySelector("li.the-article-author > a")?.innerText,
             publish: el.querySelector("li.the-article-publish").innerText,
